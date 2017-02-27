@@ -47,9 +47,14 @@ object OpaqueOperators extends Strategy {
 
     case ObliviousPermute(child) =>
       ObliviousPermuteExec(planLater(child)) :: Nil
+    case ObliviousSort(order1, ObliviousSort(order2, child)) =>
+      ObliviousSortExec(order1, planLater(child)) :: Nil
 
     case ObliviousSort(order, child) =>
       ObliviousSortExec(order, planLater(child)) :: Nil
+
+    case EncryptedSort(order1, EncryptedSort(order2, child)) =>
+      EncryptedSortExec(order1, planLater(child)) :: Nil
     case EncryptedSort(order, child) =>
       EncryptedSortExec(order, planLater(child)) :: Nil
 
